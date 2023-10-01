@@ -1,4 +1,9 @@
-import blah from './test';
+import walkDir from './dirWalker';
 
 console.log(`Hello there 👋`);
-blah();
+
+const processFile = (fullPath: string) => {
+  console.log(fullPath);
+};
+
+walkDir(process.cwd(), processFile);

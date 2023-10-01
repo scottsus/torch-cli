@@ -9,5 +9,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.0"
+  },
+  "dependencies": {
+    "ignore": "^5.2.4"
+  }
 }
