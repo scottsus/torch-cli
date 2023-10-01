@@ -1,9 +1,7 @@
-import walkDir from './dirWalker';
+#!/usr/bin/env node
 
-console.log(`Hello there 👋`);
+import 'dotenv/config';
+import runShell from './shell';
 
-const processFile = (fullPath: string) => {
-  console.log(fullPath);
-};
-
-walkDir(process.cwd(), processFile);
+console.log(`Greetings from 🔥`);
+runShell();

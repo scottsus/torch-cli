@@ -2,55 +2,50 @@ import fs from 'fs';
 import path from 'path';
 import ignore from 'ignore';
 
-export default function walkDir(
-  rootDir: string,
-  processFile: (filePath: string) => void
-) {
+export default function walkDir(rootDir: string) {
   const filter = getGitIgnoreFilter(rootDir);
   if (!filter) {
-    return;
+    return [];
   }
 
-  walkDirRecursive(rootDir, processFile, filter);
+  const rawTextArr: string[] = [];
+  walkDirRecursive(rootDir, rawTextArr, filter);
+
+  return rawTextArr;
 }
 
 function walkDirRecursive(
   rootDir: string,
-  processFile: (filePath: string) => void,
+  rawTextArr: string[],
   gitIgnores: (file: string) => boolean
 ) {
-  fs.readdir(rootDir, (err, files) => {
-    if (err) {
-      console.log(`Unable to read directory ${rootDir}:`, err);
+  const files = fs.readdirSync(rootDir);
+  files.forEach((file) => {
+    const fullPath = path.join(rootDir, file);
+    if (gitIgnores(fullPath)) {
       return;
     }
 
-    files.forEach((file) => {
-      const fullPath = path.join(rootDir, file);
-
-      if (gitIgnores(fullPath)) {
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      const folder = file;
+      if (folder.startsWith(`.`)) {
+        return;
+      }
+      walkDirRecursive(fullPath, rawTextArr, gitIgnores);
+    } else {
+      if (file === `package-lock.json`) {
         return;
       }
 
-      fs.stat(fullPath, (err, stat) => {
-        if (err) {
-          console.error(`Unable to stat path ${fullPath}:`, err);
-          return;
-        }
-
-        if (stat.isDirectory()) {
-          // Don't include hidden folders like .git
-          const folder = file;
-          if (folder.startsWith(`.`)) {
-            return;
-          }
-          walkDirRecursive(fullPath, processFile, gitIgnores);
-        } else {
-          // isFile()
-          processFile(fullPath);
-        }
-      });
-    });
+      try {
+        const data = fs.readFileSync(fullPath);
+        rawTextArr.push(data.toString());
+      } catch (err) {
+        console.error(`Unable to read file ${fullPath}:`, err);
+        return;
+      }
+    }
   });
 }
 
