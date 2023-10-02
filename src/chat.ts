@@ -5,16 +5,20 @@ import getPrompt from './prompt';
 
 export default async function useChat() {
   const chat = new ChatOpenAI({
-    openAIApiKey: process.env.OPENAI_API_KEY || '',
+    modelName: `gpt-3.5-turbo-16k`,
+    openAIApiKey: process.env.OPENAI_API_KEY,
     temperature: 0.5,
     streaming: true,
     maxTokens: 2048,
   });
 
-  const retriever = await loadContext();
   const chain = new RetrievalQAChain({
-    combineDocumentsChain: loadQAStuffChain(chat, { prompt: getPrompt() }),
-    retriever: retriever,
+    combineDocumentsChain: loadQAStuffChain(chat, {
+      prompt: getPrompt(),
+      // verbose: true,
+    }),
+    retriever: await loadContext(),
+    // returnSourceDocuments: true,
   });
 
   const runQuery = async (query: string) => {

@@ -4,6 +4,7 @@
   "description": "Context aware, LLM-powered CLI for the 10x dev 🏎️",
   "main": "index.js",
   "scripts": {
+    "build": "tsc && npm link",
     "dev": "tsc && npm link && torch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
