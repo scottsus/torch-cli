@@ -22,7 +22,7 @@ export default async function runShell() {
   }
 }
 
-const nonBlockingCommands = [`cd`, `ls`, `cat`, `code`, `vim`, `echo`];
+const nonBlockingCommands = [`cd`, `ls`, `cat`, `code`, `vim`, `echo`, `pwd`];
 const captureStdout = `| tee -a conv.txt`;
 
 async function processCmd(

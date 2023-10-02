@@ -5,7 +5,7 @@ In this conversation, you have context for an entire code repository and you're 
 Here is are the files in the repo you are working with:
 {context}
 
-Respond with a one sentence introduction, then bullet points of implementation details, then a one sentence closing summary.
+Respond with a few sentences explaining in detail what the project is about.
 If the answer is not in the repo, make sure to explicitly say that you are referencing external sources. Do not break character.
 Answer:
 `;
